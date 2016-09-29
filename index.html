@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>diffjs test</title>
+    <style>
+      textarea {
+      width:300px;
+      height:300px;
+      }
+    </style>
+  </head>
+  
+  <body>
+
+    <h1>diffjs</h1>
+
+    <table>
+      <tr>
+        <th>Original</th>
+        <th>Modified</th>
+      </tr>
+      <tr>
+        <td><textarea id="original"></textarea></td>
+        <td><textarea id="modified"></textarea></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><a href="#" id="calculate">Calculate Diff</a></td>
+      </tr>
+    </table>
+    <textarea id="diff" readonly="readonly"></textarea>
+    
+    <script type="text/javascript" src="diff.js"></script>
+    <script type="text/javascript" src="meta.debug.js"></script>
+    <script>
+
+
+var $diff = Meta.dom.$().select('#diff');
+var $calc = Meta.dom.$().select('#calculate');
+var $f1 = Meta.dom.$().select('#original');
+var $f2 = Meta.dom.$().select('#modified');
+
+$calc.on('click', function(){
+
+var f1, f2;
+f1 = $f1.val();
+f2 = $f2.val();
+
+var diff_str = diffjs.diff(f1, f2);
+$diff.val(diff_str);
+
+console.log(diff_str);
+
+var patched = diffjs.patch(f1, diff_str);
+if (patched == f2) {
+    console.log('patched == f2');
+}
+else {
+    console.log('patched != f2');
+    console.log('patched.length: ' + patched.length);
+    console.log('f2.length: ' + f2.length);
+    console.log('patched:');
+    console.log(patched);
+    console.log('DIFF:');
+    console.log(diffjs.diff(f2, patched));
+}
+
+});
+
+    </script>
+
+  </body>
+</html>
